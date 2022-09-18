@@ -7,12 +7,23 @@ from django.views import View
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import UserPassesTestMixin
 # Create your views here.
-class Home(View):
+
+
+class Home(UserPassesTestMixin , View):
+
+
+   def test_func(self):
+         return self.request.user.is_superuser
+
+
    def get(self,request):
       
-      if request.user.is_authenticated:
+      if request.user.is_authenticated :
          return render(request, "service_app/home.html", {})
 
       else:
          return redirect("/login/")
+
+

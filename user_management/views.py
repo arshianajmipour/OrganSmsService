@@ -21,14 +21,16 @@ class Login(View):
             password = form.cleaned_data.get('password')
             user = authenticate( request , username=username, password=password )
 
-            if user is None: 
-                return render ( request , 'user_management/login.html' , { "form" : form } )
+            if user is None : 
+                return render ( request , 'user_management/login.html' , { "form" : form ,"massage":"wrong username or password"} )
+            if not user.is_superuser: 
+                return render ( request , 'user_management/login.html' , { "form" : form ,"massage":"only superusers can login"} )
             
 
             login(request, user)
             return redirect("/home/")
 
-        return render(request,'user_management/login.html' , { "form" : LoginForm ,"massage":"worng info"})
+        return render(request,'user_management/login.html' , { "form" : LoginForm ,"massage":"worng captcha"})
 
 
     def get(self,request):

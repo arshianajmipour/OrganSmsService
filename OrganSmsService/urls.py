@@ -18,18 +18,20 @@ from django.urls import path
 from user_management.views import Login,Signup
 from service_app.views import Home
 from django.conf.urls import include
-from common_app.views import StateViewSet , CityViewSet , Receiver
+from common_app.views import StateViewSet , CityViewSet, Receiver
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/",Login.as_view()),
     path("signup",Signup.as_view()),
-    path("home/" , Home.as_view()),
+    path("home/" , login_required(Home.as_view())),
     path('captcha/', include('captcha.urls')),
     path('api/state' , StateViewSet.as_view({'get': 'list'})),
     path('api/state/<int:pk>' , StateViewSet.as_view({'get': 'retrieve'})),
     path('api/city' , CityViewSet.as_view({'get': 'list'})),
     path('api/city/<int:pk>' , CityViewSet.as_view({'get': 'retrieve'})),
-    path('api/service/send', Receiver.as_view())
+    path('/api/service/send', Receiver.as_view())
 ]
