@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content%}
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container contact-form card px-5 py-5 ">
+
+            <form method="post" action="/api/service/send">
+                {% csrf_token %}
+                <h3>Drop Us a Message</h3>
+               <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <select id="states" class="form-control"  onclick="fetchStates()" onchange="fetchCities(value)"/>
+                                <option value="" disabled selected>Select state</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select id="cities" class="form-control"  />
+                                <option value="" disabled selected>Select city</option>
+                            </select>                        
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" name="btnSubmit" class="btn btn-primary" value="Send Message" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <textarea name="txtMsg" class="form-control" placeholder="Your Message *" style="width: 100%; height: 150px;"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+</div>
+<script>
+
+    function fetchStates(){
+        
+        let states = {};
+        fetch('/api/state')          
+            .then(response => response.json())
+            .then(data => states = data)
+            .then(() => addStateOption(states));
+        
+    }
+
+
+    function addStateOption(states){
+        
+        select = document.getElementById("states")
+        const  L = select.options.length;
+        if( L !=  states.length+1){
+            for (let i = 0; i < states.length; i++) {
+                let option = document.createElement("option");
+                option.text = states[i].title;
+                option.value = states[i].id;
+                select.add(option);
+            }
+        }
+    }
+
+
+    function fetchCities(id){
+        let cities = {};
+        fetch('/api/state/'+id)          
+            .then(response => response.json())
+            .then(data => cities = data)
+            .then(() => addCityOption(cities));
+    }
+
+
+    function addCityOption(cities){
+        
+        select = document.getElementById("cities")
+        const  L = select.options.length;
+        
+         for(let i = L-1; i >= 1; i--) {
+            select.remove(i);
+        }
+        if( L !=  cities.length+1 ){
+            for (let i = 0; i < cities.length; i++) {
+                let option = document.createElement("option");
+                option.text = cities[i].title;
+                console.log(cities[i].title)
+                option.value = cities[i].id;
+                select.add(option);
+            }
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content%}
+
+<form class="d-flex flex-column align-items-center container mt-5" name="LoginForm" action="/signup" method="post">
+    {% csrf_token %}
+
+    <div class="card px-5 py-5 d-flex row" id="form1">
+
+        {% for field,error in form.errors.items %}
+            <li class="text-danger">{{ error }}</li>
+        {% endfor %}
+
+        {% for field in form %}
+        <div class="form-group m-1">
+            {{ field.label_tag }}
+            <div class="controls">
+                {{ field }}
+            </div>
+        </div>
+        {%endfor%}
+        <a href="/singup">create new acount</a>
+        <div class="form-group m-4" >
+            <div class="controls submitbtn" id="submit">
+                <button type="submit" class="btn btn-primary " >login</button>
+            </div>
+        </div>
+</form>
+
+{%endblock%}
