@@ -16,9 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from user_management.views import Login,Signup
-from service_app.views import Home
+from service_app.views import Home, Receiver
 from django.conf.urls import include
-from common_app.views import StateViewSet , CityViewSet, Receiver
+from common_app.views import StateViewSet , CityViewSet
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 
@@ -33,5 +33,5 @@ urlpatterns = [
     path('api/state/<int:pk>' , StateViewSet.as_view({'get': 'retrieve'})),
     path('api/city' , CityViewSet.as_view({'get': 'list'})),
     path('api/city/<int:pk>' , CityViewSet.as_view({'get': 'retrieve'})),
-    path('/api/service/send', Receiver.as_view())
+    path('api/service/send/', Receiver.as_view())
 ]

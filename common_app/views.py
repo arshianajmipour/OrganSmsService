@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from common_app.models import State,City
 from django.views import View
 from django.shortcuts import render,redirect
+from django.http import HttpResponse
 # Create your views here.
 
 class StateViewSet(viewsets.ViewSet):
@@ -38,7 +39,3 @@ class CityViewSet(viewsets.ViewSet):
 
 
 
-class Receiver(View):
-    def post(self,request):
-        # Redirect("/home")
-        return redirect("/home/")

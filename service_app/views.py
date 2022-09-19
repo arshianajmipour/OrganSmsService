@@ -8,6 +8,9 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.http import HttpResponse
+from common_app.models import State,City
+import json
 # Create your views here.
 
 
@@ -26,4 +29,11 @@ class Home(UserPassesTestMixin , View):
       else:
          return redirect("/login/")
 
+
+class Receiver(View):
+    def post(self,request):
+        # Redirect("/home")
+        data = json.load(request)
+        city = City.objects.get(id = data.get("city"))
+        return HttpResponse("your massage received! from " + city.title )
 
